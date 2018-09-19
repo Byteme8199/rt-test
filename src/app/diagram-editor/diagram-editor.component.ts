@@ -99,8 +99,7 @@ export class DiagramEditorComponent implements OnInit {
               fromLinkableSelfNode: true, toLinkableSelfNode: true,
               fromLinkableDuplicates: true, toLinkableDuplicates: true,
             },
-            new go.Binding("stroke", "color"),
-            new go.Binding("strokeWidth", "strokeWidth"),
+            new go.Binding("stroke", "color")
             new go.Binding("width", "imageCount", this.getScale),
             new go.Binding("height", "imageCount", this.getScale)),
             $(go.TextBlock, 
