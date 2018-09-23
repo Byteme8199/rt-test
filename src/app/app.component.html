@@ -1,34 +1,90 @@
-<app-diagram-editor
-  [model]="selectedModel"
-  (nodeHover)="showDetails($event)"
-  (nodeSelected)="showDetails($event)"
-  (modelChanged)="onModelChanged($event)">
-</app-diagram-editor>
-      
-<div class="card card-shadow top-left">
-  <h5 class="card-header">Zoom Level: {{ selectedModelTitle }}</h5>
-  <div class="card-body">
-    <div class="form-group">
-      <label for="layers">Level: </label>
-      <select class="form-control" id="layers" (change)="onChangeModel($event.target.value)">
-        <option *ngFor="let model of models" value={{model}}>
-          {{model}}
-        </option>
-      </select>
+<div class="wrapper ">
+  <app-sidebar></app-sidebar>
+  <div class="main-panel">
+    <app-nav-bar></app-nav-bar>
+    <div class="content">
+      <div class="container-fluid">
+        
+        <app-diagram-editor
+          [model]="selectedModel"
+          (nodeHover)="showDetails($event)"
+          (nodeSelected)="showDetails($event)"
+          (modelChanged)="onModelChanged($event)">
+        </app-diagram-editor>
+        <div class="card card-350 top-left">
+          <h5 class="card-header card-header-primary">Zoom Level: {{ selectedModelTitle }}</h5>
+          <div class="card-body">
+            <div class="form-group bmd-form-group">
+              <label class="bmd-label-floating" for="layers">Level: </label>
+              <select class="form-control" id="layers" (change)="onChangeModel($event.target.value)">
+                <option *ngFor="let model of models" value={{model}}>
+                  {{model}}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card top-right card-350" *ngIf="node">
+          <h5 class="card-header card-header-primary">Node Details</h5>
+          <div class="">  
+            <div class="form-group">
+              <form #form="ngForm" (ngSubmit)="onCommitDetails()" class="modal-scroll">
+                <div *ngIf="node.data.cpuCount">
+                  <ul class="list-group list-group-flush" [hidden]="!node.data.cpuCount">
+                    <li class="list-group-item active">Status</li>
+                    <li class="list-group-item"><strong>State</strong><span class="pull-right text-truncate info-spot ml-3">{{ node.data.state }}</span></li>
+                    <li class="list-group-item"><strong>CPU</strong><span class="pull-right text-truncate info-spot ml-3">{{ node.data.cpuCount }}</span></li>
+                    <li class="list-group-item"><strong>Memory</strong><span class="pull-right text-truncate info-spot ml-3">{{ node.data.memoryTotal }}</span></li>
+                  </ul>
+                  <ul class="list-group list-group-flush" [hidden]="!node.data.os">
+                    <li class="list-group-item active">Identification</li>
+                    <li class="list-group-item"><strong>Name</strong><span class="pull-right text-truncate info-spot ml-3">{{ node.data.name }}</span></li>
+                    <li class="list-group-item"><strong>Address</strong><span class="pull-right text-truncate info-spot ml-3">{{ node.data.cpuCount }}</span></li>
+                    <li class="list-group-item"><strong>OS</strong><span class="pull-right text-truncate info-spot ml-3">{{ node.data.os }}</span></li>
+                    <li class="list-group-item"><strong>Arch:</strong><span class="pull-right text-truncate info-spot ml-3">{{ node.data.architecture }}</span></li>
+                    <li class="list-group-item"><strong>Engine</strong><span class="pull-right text-truncate info-spot ml-3">{{ node.data.serverVersion }}</span></li>
+                  </ul>
+                  <ul class="list-group list-group-flush" [hidden]="!node.data.containerCount">
+                    <li class="list-group-item active">Containers</li>
+                    <li class="list-group-item"><strong>Total</strong><span class="pull-right text-truncate info-spot ml-3">{{ node.data.containerCount }}</span></li>
+                    <li class="list-group-item"><strong>Running</strong><span class="pull-right text-truncate info-spot ml-3">{{ node.data.runningContainerCount }}</span></li>
+                    <li class="list-group-item"><strong>Stopped</strong><span class="pull-right text-truncate info-spot ml-3">{{ node.data.stoppedContainerCount }}</span></li>
+                    <li class="list-group-item"><strong>Paused</strong><span class="pull-right text-truncate info-spot ml-3">{{ node.data.pausedContainerCount }}</span></li>
+                  </ul>
+                  <ul class="list-group list-group-flush" [hidden]="!node.data.imageCount">
+                    <li class="list-group-item active">Images</li>
+                    <li class="list-group-item"><strong>Total</strong><span class="pull-right text-truncate info-spot ml-3">{{ node.data.imageCount }}</span></li>
+                  </ul>
+                </div>
+                <div *ngIf="node.data.created">
+                  <ul class="list-group list-group-flush" [hidden]="!node.data.created">
+                    <li class="list-group-item active">Status</li>
+                    <li class="list-group-item"><strong>State</strong><span class="pull-right text-truncate info-spot ml-3">{{ node.data.state }}</span></li>
+                    <li class="list-group-item"><strong>Status</strong><span class="pull-right text-truncate info-spot ml-3">{{ node.data.status }}</span></li>
+                    <li class="list-group-item"><strong>Created</strong><span class="pull-right text-truncate info-spot ml-3">{{ node.data.created }}</span></li>
+                  </ul>
+                  <ul class="list-group list-group-flush" [hidden]="!node.data.containerId">
+                    <li class="list-group-item active">Identification</li>
+                    <li class="list-group-item"><strong>Container ID</strong><span class="pull-right text-truncate info-spot ml-3">{{ node.data.containerId }}</span></li>
+                    <li class="list-group-item"><strong>Name(s)</strong><span class="pull-right text-truncate info-spot ml-3"><span *ngFor="let name of node.data.names; let i = index"><span [hidden]="i === 0">, </span> {{name}}</span></span></li>
+                    <li class="list-group-item"><strong>Image</strong><span class="pull-right text-truncate info-spot ml-3">{{ node.data.image }}</span></li>
+                    <li class="list-group-item"><strong>Command</strong><span class="pull-right text-truncate info-spot ml-3">{{ node.data.command }}</span></li>
+                  </ul>
+                  <ul class="list-group list-group-flush" [hidden]="!node.data.networkSettings">
+                    <li class="list-group-item active">Networks</li>
+                    <li class="list-group-item"><strong>Type</strong><span class="pull-right text-truncate info-spot ml-3">NAT</span></li>
+                    <li class="list-group-item"><strong>IPv4 Address</strong><span class="pull-right text-truncate info-spot ml-3">{{ node.data.networkSettings.nat.ipv4Address }}</span></li>
+                    <li class="list-group-item"><strong>IPv4 Gateway</strong><span class="pull-right text-truncate info-spot ml-3">{{ node.data.networkSettings.nat.ipv4Gateway }}</span></li>
+                    <li class="list-group-item"><strong>MAC Address</strong><span class="pull-right text-truncate info-spot ml-3">{{ node.data.networkSettings.nat.macAddress}}</span></li>
+                  </ul>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
-
-<div class="card card-shadow top-right" *ngIf="node">
-  <h5 class="card-header">Node Details</h5>
-  <div class="card-body">  
-    <div class="form-group">
-      <form #form="ngForm" (ngSubmit)="onCommitDetails()">
-        <div><label>Name: </label> <span> {{node.data.text}}</span></div>
-        <div><label>CPU: </label> <span> {{node.key}} Cores</span></div>
-        <div><label>RAM: </label> <span> {{node.location.x.toFixed(2) * 1000}} MB</span></div>
-        <div><label>Linked: </label> <span> {{node.linksConnected.count}}</span></div>
-      </form>
-    </div>
+    <app-footer></app-footer>
   </div>
 </div>

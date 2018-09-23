@@ -9,50 +9,49 @@ import * as go from 'gojs';
 export class DiagramEditorComponent implements OnInit {
   private diagram: go.Diagram = new go.Diagram();
 
-  getScale(scale){
-    if(scale < 30) {
+  getSize(size){
+    if(size < 30) {
       return 30;
-    } else if (scale > 100) {
+    } else if (size > 100) {
       return 100;
     } else {
-      return scale
+      return size
     }
   }
 
-  autoMargin(scale) {
+  autoMargin(size) {
     let autoMargin:number = 0;
-    if(scale < 30) {
+    if(size < 30) {
       autoMargin = 30;
-    } else if (scale > 100) {
+    } else if (size > 100) {
       autoMargin = 100;
     } else {
-      autoMargin = scale
+      autoMargin = size
     }
     return new go.Margin(autoMargin / 4, 0, 0 ,0);
   }
 
-  textSize(scale){
-    let halfScale:number = 0;
-    if(scale < 30) {
-      halfScale = 30;
-    } else if (scale > 100) {
-      halfScale = 100;
+  textSize(size){
+    let halfsize:number = 0;
+    if(size < 30) {
+      halfsize = 30;
+    } else if (size > 100) {
+      halfsize = 100;
     } else {
-      halfScale = scale
+      halfsize = size
     }
-    return halfScale / 2 + 'px FontAwesome'
+    return halfsize / 2 + 'px FontAwesome'
   }
 
-  minSize(scale){
+  minSize(size){
     let minSize:number = 0;
-    if(scale < 30) {
+    if(size < 30) {
       minSize = 30;
-    } else if (scale > 100) {
+    } else if (size > 100) {
       minSize = 100;
     } else {
-      minSize = scale
+      minSize = size
     }
-    console.log(scale, minSize);
     return new go.Size(minSize, minSize)
   }
 
@@ -93,39 +92,39 @@ export class DiagramEditorComponent implements OnInit {
         new go.Binding("location", "loc", go.Point.parse).makeTwoWay(go.Point.stringify),
         $(go.Panel,
           $(go.Shape, "Circle",
-            { fill: "white", portId: "", cursor: "pointer",
+            { fill: "#202940", portId: "", cursor: "pointer",
               // allow many kinds of links
               fromLinkable: true, toLinkable: true,
               fromLinkableSelfNode: true, toLinkableSelfNode: true,
               fromLinkableDuplicates: true, toLinkableDuplicates: true,
             },
-            new go.Binding("stroke", "color")
-            new go.Binding("width", "imageCount", this.getScale),
-            new go.Binding("height", "imageCount", this.getScale)),
+            new go.Binding("stroke", "color"),
+            new go.Binding("width", "size", this.getSize),
+            new go.Binding("height", "size", this.getSize)),
             $(go.TextBlock, 
               { 
-                stroke: '#000',
+                stroke: '#8b92a9',
                 textAlign: 'center',
                 margin: 0,
                 font: '30px FontAwesome',
                 editable: false,
                 isMultiline: false,
               },
-              new go.Binding("margin", "imageCount", this.autoMargin),
-              new go.Binding("font", "imageCount", this.textSize),
+              new go.Binding("margin", "size", this.autoMargin),
+              new go.Binding("font", "size", this.textSize),
               new go.Binding("text", "icon"),
-              new go.Binding("minSize", "imageCount", this.minSize),
+              new go.Binding("minSize", "size", this.minSize),
             ),
         ),
         { toolTip:
             $(go.Adornment, "Auto",
-                $(go.Shape, { fill: "white", stroke: '#888', strokeWidth: 2 }),
-                $(go.TextBlock, { margin: 8, stroke: '#888', font: "bold 11px sans-serif" },
+                $(go.Shape, { fill: "#202940", stroke: '#8b92a9', strokeWidth: 2 }),
+                $(go.TextBlock, { margin: 8, stroke: '#8b92a9', font: "bold 11px sans-serif" },
                 new go.Binding("text", "name")))
         },
         $(go.TextBlock, { 
           textAlign: 'center', 
-          stroke: '#fff',
+          stroke: '#8b92a9',
           maxSize: new go.Size(80, NaN) 
         },
         new go.Binding("text", "name"))
@@ -140,8 +139,8 @@ export class DiagramEditorComponent implements OnInit {
           reshapable: true, relinkableFrom: false, relinkableTo: false,
           toShortLength: 3
         },
-        $(go.Shape, { strokeWidth: 1.5 }),
-        $(go.Shape, { toArrow: "standard", stroke: null }),
+        $(go.Shape, { strokeWidth: 2, stroke: '#32383e' }),
+        $(go.Shape, { toArrow: "standard", stroke: '#32383e' }),
         $(go.Panel, "Auto",
           $(go.TextBlock, "",  // the label text
             {
@@ -154,6 +153,38 @@ export class DiagramEditorComponent implements OnInit {
             // editing the text automatically updates the model data
             new go.Binding("text").makeTwoWay()))
       );
+
+    // define the group template
+    this.diagram.groupTemplate =
+      $(go.Group, "Auto",
+        { // define the group's internal layout
+          layout: $(go.TreeLayout,
+                    { angle: 90, arrangement: go.TreeLayout.ArrangementHorizontal, isRealtime: true }),
+          // the group begins unexpanded;
+          // upon expansion, a Diagram Listener will generate contents for the group
+          isSubGraphExpanded: true,
+        },
+        $(go.Shape, "Rectangle",
+          { fill: null, stroke: "#ddd", strokeWidth: 1 },
+          new go.Binding("stroke", "color"))
+        ),
+        $(go.Panel, "Vertical",
+          { defaultAlignment: go.Spot.Left, margin: 1 },
+          $(go.Panel, "Horizontal",
+            { defaultAlignment: go.Spot.Top },
+            // the SubGraphExpanderButton is a panel that functions as a button to expand or collapse the subGraph
+            $("SubGraphExpanderButton"),
+            $(go.TextBlock,
+              { font: "Bold 18px Sans-Serif", margin: 1 },
+              new go.Binding("text", "key")
+          ),
+          // create a placeholder to represent the area where the contents of the group are
+          $(go.Placeholder,
+            { padding: new go.Margin(0, 10) })
+        )  // end Vertical Panel
+      );  // end Group
+
+
   }
 
   ngOnInit() {

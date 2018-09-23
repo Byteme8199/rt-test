@@ -4,18 +4,21 @@ import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { DiagramEditorComponent } from './diagram-editor/diagram-editor.component';
-
-import { AngularFontAwesomeModule } from 'angular-font-awesome';
+import { NavBarComponent } from './nav-bar/nav-bar.component';
+import { SidebarComponent } from './sidebar/sidebar.component';
+import { FooterComponent } from './footer/footer.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    DiagramEditorComponent
+    DiagramEditorComponent,
+    NavBarComponent,
+    SidebarComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,
-    FormsModule,
-    AngularFontAwesomeModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
