@@ -1,0 +1,60 @@
+.list-group-item.active {
+  background: linear-gradient(60deg, #029eb1, #202940);
+  color: #FFF;
+}
+
+.list-group-item, .form-control, option, select, .dropdown-menu.dropdown-menu-right {
+  color: #8b92a9;
+  background-color: #202940;
+  border: none;
+}
+
+.dropdown-item {
+  color: #8b92a9 !important;
+}
+
+.top-right {
+  position: absolute;
+  top: 70px;
+  right: 10px;
+  z-index: 2;
+}
+
+.top-left {
+  position: absolute;
+  top: 70px;
+  left: 10px;
+  z-index: 2;
+}
+
+label {
+  font-weight: bold;
+}
+
+.form-group {
+  padding-bottom: 0px;
+  margin-bottom: 0px;
+}
+
+.modal-scroll {
+  max-height: 700px;
+  overflow: auto;
+}
+
+.list-group-item strong {
+  width: 100px;
+}
+
+.info-spot {
+  width: 150px;
+  display: table-caption;
+  float: right;
+}
+
+.card-350 {
+  width: 350px;
+}
+
+.card .card-header-primary .card-icon, .card .card-header-primary:not(.card-header-icon):not(.card-header-text), .card .card-header-primary .card-text {
+  box-shadow: 0 4px 20px 0px rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(0, 0, 0, 0.4);
+}

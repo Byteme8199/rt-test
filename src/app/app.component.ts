@@ -11,16 +11,42 @@ export class AppComponent {
   selectedModelTitle = 'Hosts';
 
   model = new go.GraphLinksModel([
-    { key: "Good", isGroup: true, color: "green" },
-    { key: "Bad", isGroup: true, color: "red" },
-    { key: "Warning", isGroup: true, color: "orange" },
+    {
+      "key": 0,
+      "icon": "\uf233", 
+      "color": "red",
+      "group": "Failed",
+      "type": "host",
+      "size": 30,
+      "id":"c179e882-4367-da0d-3cb6-fe8fa80ee2bf",
+      "hostId":"DUFA:W3GX:W4XM:5ZJ3:U5CL:UOVJ:YBKA:MOSV:K64T:7DIQ:YOVQ:E2KK",
+      "name":"Host 3",
+      "osType":"windows",
+      "os":"Windows 10 Pro Version 1803 (OS Build 17134.285)",
+      "architecture":"x86_64",
+      "kernelVersion":"10.0 17134 (17134.1.amd64fre.rs4_release.180410-1804)",
+      "serverVersion":"18.06.1-ce",
+      "rootDirectory":"C:\\ProgramData\\Docker",
+      "experimental":false,
+      "httpProxy":"",
+      "httpsProxy":"",
+      "noProxy":"",
+      "labels":[],
+      "cpuCount":8,
+      "memoryTotal":17077833728,
+      "containerCount":1,
+      "runningContainerCount":1,
+      "pausedContainerCount":0,
+      "stoppedContainerCount":0,
+      "imageCount":120
+    },
     {
       "key": 1,
       "icon": "\uf233", 
       "color": "green",
-      "group": "Good",
+      "group": "Running",
       "type": "host",
-      "size": 55,
+      "size": 30,
       "id":"c179e882-4367-da0d-3cb6-fe8fa80ee2bf",
       "hostId":"DUFA:W3GX:W4XM:5ZJ3:U5CL:UOVJ:YBKA:MOSV:K64T:7DIQ:YOVQ:E2KK",
       "name":"Alienware 1",
@@ -47,9 +73,9 @@ export class AppComponent {
       "key": 2,
       "icon": "\uf233", 
       "color": "orange",
-      "group": "Good",
+      "group": "Warning",
       "type": "host",
-      "size": 12,
+      "size": 30,
       "id":"c179e882-4367-da0d-3cb6-fe8fa80ee2bf",
       "hostId":"DUFA:W3GX:W4XM:5ZJ3:U5CL:UOVJ:YBKA:MOSV:K64T:7DIQ:YOVQ:E2KK",
       "name":"Host 2",
@@ -75,10 +101,39 @@ export class AppComponent {
     {
       "key": 3,
       "icon": "\uf233", 
-      "color": "orange",
-      "group": "Good",
+      "color": "red",
+      "group": "Failed",
       "type": "host",
-      "size": 120,
+      "size": 30,
+      "id":"c179e882-4367-da0d-3cb6-fe8fa80ee2bf",
+      "hostId":"DUFA:W3GX:W4XM:5ZJ3:U5CL:UOVJ:YBKA:MOSV:K64T:7DIQ:YOVQ:E2KK",
+      "name":"Host 3",
+      "osType":"windows",
+      "os":"Windows 10 Pro Version 1803 (OS Build 17134.285)",
+      "architecture":"x86_64",
+      "kernelVersion":"10.0 17134 (17134.1.amd64fre.rs4_release.180410-1804)",
+      "serverVersion":"18.06.1-ce",
+      "rootDirectory":"C:\\ProgramData\\Docker",
+      "experimental":false,
+      "httpProxy":"",
+      "httpsProxy":"",
+      "noProxy":"",
+      "labels":[],
+      "cpuCount":8,
+      "memoryTotal":17077833728,
+      "containerCount":1,
+      "runningContainerCount":1,
+      "pausedContainerCount":0,
+      "stoppedContainerCount":0,
+      "imageCount":120
+    },
+    {
+      "key": 4,
+      "icon": "\uf233", 
+      "color": "orange",
+      "group": "Warning",
+      "type": "host",
+      "size": 30,
       "id":"c179e882-4367-da0d-3cb6-fe8fa80ee2bf",
       "hostId":"DUFA:W3GX:W4XM:5ZJ3:U5CL:UOVJ:YBKA:MOSV:K64T:7DIQ:YOVQ:E2KK",
       "name":"Host 3",
@@ -400,43 +455,6 @@ export class AppComponent {
     } else {
       this.selectedModel = this.model;
     }
-  }
-
-  onCommitDetails() {
-    if (this.node) {
-      const model = this.node.diagram.model;
-      // copy the edited properties back into the node's model data,
-      // all within a transaction
-      model.startTransaction();
-      model.setDataProperty(this.node.data, "text", this.data.text);
-      model.setDataProperty(this.node.data, "color", this.data.color);
-      model.setDataProperty(this.node.scale, "scale", this.data.scale);
-      model.commitTransaction("modified properties");
-
-      const model_2 = this.node.diagram.model;
-      // copy the edited properties back into the node's model data,
-      // all within a transaction
-      model_2.startTransaction();
-      model_2.setDataProperty(this.node.data, "text", this.data.text);
-      model_2.setDataProperty(this.node.data, "color", this.data.color);
-      model_2.setDataProperty(this.node.scale, "scale", this.data.scale);
-      model_2.commitTransaction("modified properties");
-
-      const model_3 = this.node.diagram.model;
-      // copy the edited properties back into the node's model data,
-      // all within a transaction
-      model_3.startTransaction();
-      model_3.setDataProperty(this.node.data, "text", this.data.text);
-      model_3.setDataProperty(this.node.data, "color", this.data.color);
-      model_3.setDataProperty(this.node.scale, "scale", this.data.scale);
-      model_3.commitTransaction("modified properties");
-
-    }
-  }
-
-  onCancelChanges() {
-    // wipe out anything the user may have entered
-    this.showDetails(this.node);
   }
 
   onModelChanged(c: go.ChangedEvent) {

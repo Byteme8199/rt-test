@@ -1,3 +1,10 @@
+<form class="form-inline">
+  <label class="my-1 mr-2" for="layers">Sort: {{ sortString }} </label>
+  <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+    <button type="button" class="btn btn-secondary" (click)="sortBy('status')">By Status</button>
+    <button type="button" class="btn btn-secondary" (click)="sortBy('other')">By Other</button>
+  </div>
+</form>
 <div class="diagramsPanel">
   <div #diagramDiv class="diagramDiv" style="background-color: #1a2035; border:none"></div>
 </div>

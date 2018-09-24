@@ -9,6 +9,8 @@ import * as go from 'gojs';
 export class DiagramEditorComponent implements OnInit {
   private diagram: go.Diagram = new go.Diagram();
 
+  sortString = "color";
+
   getSize(size){
     if(size < 30) {
       return 30;
@@ -17,6 +19,11 @@ export class DiagramEditorComponent implements OnInit {
     } else {
       return size
     }
+  }
+
+  sortBy(sort){
+    console.log(sort);
+    this.sortString = sort;
   }
 
   autoMargin(size) {
@@ -55,7 +62,22 @@ export class DiagramEditorComponent implements OnInit {
     return new go.Size(minSize, minSize)
   }
 
-  
+  comparerFunc(a, b) {
+    var at, bt;
+    //console.log(this.sortString);
+    // if(this.sortString === "color") {
+    //   at = a.data.color; 
+    //   bt = b.data.color;
+    // } else {
+    //   at = a.data.key; 
+    //   bt = b.data.key;
+    // }
+    at = a.data.color; 
+    bt = b.data.color;
+    if (at < bt) return -1;
+    if (at > bt) return 1;
+    return 0;
+  }
 
   @ViewChild('diagramDiv')
   private diagramRef: ElementRef;
@@ -71,15 +93,22 @@ export class DiagramEditorComponent implements OnInit {
   modelChanged = new EventEmitter<go.ChangedEvent>();
 
   constructor() {
-
-    //console.log(this.diagram.model);
     const $ = go.GraphObject.make;
     this.diagram = new go.Diagram();
     this.diagram.initialAutoScale = go.Diagram.UniformToFill,
-    this.diagram.initialContentAlignment = go.Spot.Center;
+    this.diagram.initialContentAlignment = go.Spot.TopLeft;
     this.diagram.allowDrop = false;  // necessary for dragging from Palette
     this.diagram.undoManager.isEnabled = true;
-    this.diagram.layout = $(go.ForceDirectedLayout, { defaultSpringLength: 0 });
+    this.diagram.layout = $(go.GridLayout,
+      { wrappingWidth: Infinity,
+        alignment: go.GridLayout.Position,
+        cellSize: new go.Size(1, 1),
+        spacing: new go.Size(4, 4),
+        sorting: go.GridLayout.Ascending,
+        comparer: this.comparerFunc
+      }
+    )
+    new go.Binding("stroke", "color"),
     this.diagram.addDiagramListener("ChangedSelection",
         e => {
           const node = e.diagram.selection.first();
@@ -87,9 +116,30 @@ export class DiagramEditorComponent implements OnInit {
         });
     this.diagram.addModelChangedListener(e => e.isTransactionFinished && this.modelChanged.emit(e));
 
+    // this.diagram.groupTemplateMap.add("Group",
+    //   $(go.Group, "Vertical",
+    //     { background: "transparent" },
+    //       $(go.Shape, "Rectangle",
+    //           { fill: null, strokeWidth: 0 }),
+    //         $(go.Panel, "Vertical",
+    //           { defaultAlignment: go.Spot.Top, margin: 1 },
+    //           $(go.Panel, "Horizontal",
+    //             // the SubGraphExpanderButton is a panel that functions as a button to expand or collapse the subGraph
+    //             $("SubGraphExpanderButton"),
+    //             $(go.TextBlock,
+    //               { font: "Bold 18px Sans-Serif", margin: 4 },
+    //               new go.Binding("text", "key"),
+    //               new go.Binding("stroke", "color"))
+    //           ),
+    //           // create a placeholder to represent the area where the contents of the group are
+    //           $(go.Placeholder,
+    //             { padding: new go.Margin(0, 0) })
+    //         )  // end Vertical Panel
+    //       ),
+    //   );  // end Group and call to add to template Map
+      
     this.diagram.nodeTemplate =
       $(go.Node, "Vertical",
-        new go.Binding("location", "loc", go.Point.parse).makeTwoWay(go.Point.stringify),
         $(go.Panel,
           $(go.Shape, "Circle",
             { fill: "#202940", portId: "", cursor: "pointer",
@@ -156,7 +206,7 @@ export class DiagramEditorComponent implements OnInit {
 
     // define the group template
     this.diagram.groupTemplate =
-      $(go.Group, "Auto",
+      $(go.Group, "Horizontal",
         { // define the group's internal layout
           layout: $(go.TreeLayout,
                     { angle: 90, arrangement: go.TreeLayout.ArrangementHorizontal, isRealtime: true }),
@@ -166,8 +216,10 @@ export class DiagramEditorComponent implements OnInit {
         },
         $(go.Shape, "Rectangle",
           { fill: null, stroke: "#ddd", strokeWidth: 1 },
-          new go.Binding("stroke", "color"))
+          new go.Binding("stroke", "color"),
+          new go.Binding("location", "loc", go.Point.parse).makeTwoWay(go.Point.stringify))
         ),
+        
         $(go.Panel, "Vertical",
           { defaultAlignment: go.Spot.Left, margin: 1 },
           $(go.Panel, "Horizontal",
