@@ -1,0 +1,22 @@
+{
+  "name": "datamaker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "faker": "^4.1.0",
+    "koa": "^2.5.3",
+    "koa-json": "^2.0.2"
+  },
+  "devDependencies": {
+    "koa-router": "^7.4.0",
+    "nodemon": "^1.18.4"
+  },
+  "scripts": {
+    "start": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

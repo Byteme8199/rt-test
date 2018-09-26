@@ -1,12 +1,15 @@
 import { Component, OnInit, ViewChild, ElementRef, Input, Output, EventEmitter } from '@angular/core';
+import { ApiService } from '../api.service';
 import * as go from 'gojs';
 
 @Component({
   selector: 'app-diagram-editor',
   templateUrl: './diagram-editor.component.html',
-  styleUrls: ['./diagram-editor.component.css']
+  styleUrls: ['./diagram-editor.component.css'],
+  providers: [ApiService]
 })
 export class DiagramEditorComponent implements OnInit {
+
   private diagram: go.Diagram = new go.Diagram();
 
   sortString = "color";
@@ -92,7 +95,8 @@ export class DiagramEditorComponent implements OnInit {
   @Output()
   modelChanged = new EventEmitter<go.ChangedEvent>();
 
-  constructor() {
+  constructor(private apiService: ApiService) {
+
     const $ = go.GraphObject.make;
     this.diagram = new go.Diagram();
     this.diagram.initialAutoScale = go.Diagram.UniformToFill,

@@ -1,162 +1,35 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
+import { ApiService } from './api.service';
 import * as go from 'gojs';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
+  providers: [ApiService]
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
+
+  constructor(private apiService: ApiService) {
+  }
+
+  ngOnInit() {
+    this.getHosts();
+  }
+
+  graphData;
+
+  getHosts(){
+    this.apiService.getHosts().subscribe(
+      data => { this.graphData = data},
+      err => console.error(err),
+      () => console.log('done loading hosts')
+    );
+  }
 
   selectedModelTitle = 'Hosts';
 
-  model = new go.GraphLinksModel([
-    {
-      "key": 0,
-      "icon": "\uf233", 
-      "color": "red",
-      "group": "Failed",
-      "type": "host",
-      "size": 30,
-      "id":"c179e882-4367-da0d-3cb6-fe8fa80ee2bf",
-      "hostId":"DUFA:W3GX:W4XM:5ZJ3:U5CL:UOVJ:YBKA:MOSV:K64T:7DIQ:YOVQ:E2KK",
-      "name":"Host 3",
-      "osType":"windows",
-      "os":"Windows 10 Pro Version 1803 (OS Build 17134.285)",
-      "architecture":"x86_64",
-      "kernelVersion":"10.0 17134 (17134.1.amd64fre.rs4_release.180410-1804)",
-      "serverVersion":"18.06.1-ce",
-      "rootDirectory":"C:\\ProgramData\\Docker",
-      "experimental":false,
-      "httpProxy":"",
-      "httpsProxy":"",
-      "noProxy":"",
-      "labels":[],
-      "cpuCount":8,
-      "memoryTotal":17077833728,
-      "containerCount":1,
-      "runningContainerCount":1,
-      "pausedContainerCount":0,
-      "stoppedContainerCount":0,
-      "imageCount":120
-    },
-    {
-      "key": 1,
-      "icon": "\uf233", 
-      "color": "green",
-      "group": "Running",
-      "type": "host",
-      "size": 30,
-      "id":"c179e882-4367-da0d-3cb6-fe8fa80ee2bf",
-      "hostId":"DUFA:W3GX:W4XM:5ZJ3:U5CL:UOVJ:YBKA:MOSV:K64T:7DIQ:YOVQ:E2KK",
-      "name":"Alienware 1",
-      "osType":"windows",
-      "os":"Windows 10 Pro Version 1803 (OS Build 17134.285)",
-      "architecture":"x86_64",
-      "kernelVersion":"10.0 17134 (17134.1.amd64fre.rs4_release.180410-1804)",
-      "serverVersion":"18.06.1-ce",
-      "rootDirectory":"C:\\ProgramData\\Docker",
-      "experimental":false,
-      "httpProxy":"",
-      "httpsProxy":"",
-      "noProxy":"",
-      "labels":[],
-      "cpuCount":8,
-      "memoryTotal":17077833728,
-      "containerCount":1,
-      "runningContainerCount":1,
-      "pausedContainerCount":0,
-      "stoppedContainerCount":0,
-      "imageCount":55
-    },
-    {
-      "key": 2,
-      "icon": "\uf233", 
-      "color": "orange",
-      "group": "Warning",
-      "type": "host",
-      "size": 30,
-      "id":"c179e882-4367-da0d-3cb6-fe8fa80ee2bf",
-      "hostId":"DUFA:W3GX:W4XM:5ZJ3:U5CL:UOVJ:YBKA:MOSV:K64T:7DIQ:YOVQ:E2KK",
-      "name":"Host 2",
-      "osType":"windows",
-      "os":"Windows 10 Pro Version 1803 (OS Build 17134.285)",
-      "architecture":"x86_64",
-      "kernelVersion":"10.0 17134 (17134.1.amd64fre.rs4_release.180410-1804)",
-      "serverVersion":"18.06.1-ce",
-      "rootDirectory":"C:\\ProgramData\\Docker",
-      "experimental":false,
-      "httpProxy":"",
-      "httpsProxy":"",
-      "noProxy":"",
-      "labels":[],
-      "cpuCount":8,
-      "memoryTotal":17077833728,
-      "containerCount":1,
-      "runningContainerCount":1,
-      "pausedContainerCount":0,
-      "stoppedContainerCount":0,
-      "imageCount":12
-    },
-    {
-      "key": 3,
-      "icon": "\uf233", 
-      "color": "red",
-      "group": "Failed",
-      "type": "host",
-      "size": 30,
-      "id":"c179e882-4367-da0d-3cb6-fe8fa80ee2bf",
-      "hostId":"DUFA:W3GX:W4XM:5ZJ3:U5CL:UOVJ:YBKA:MOSV:K64T:7DIQ:YOVQ:E2KK",
-      "name":"Host 3",
-      "osType":"windows",
-      "os":"Windows 10 Pro Version 1803 (OS Build 17134.285)",
-      "architecture":"x86_64",
-      "kernelVersion":"10.0 17134 (17134.1.amd64fre.rs4_release.180410-1804)",
-      "serverVersion":"18.06.1-ce",
-      "rootDirectory":"C:\\ProgramData\\Docker",
-      "experimental":false,
-      "httpProxy":"",
-      "httpsProxy":"",
-      "noProxy":"",
-      "labels":[],
-      "cpuCount":8,
-      "memoryTotal":17077833728,
-      "containerCount":1,
-      "runningContainerCount":1,
-      "pausedContainerCount":0,
-      "stoppedContainerCount":0,
-      "imageCount":120
-    },
-    {
-      "key": 4,
-      "icon": "\uf233", 
-      "color": "orange",
-      "group": "Warning",
-      "type": "host",
-      "size": 30,
-      "id":"c179e882-4367-da0d-3cb6-fe8fa80ee2bf",
-      "hostId":"DUFA:W3GX:W4XM:5ZJ3:U5CL:UOVJ:YBKA:MOSV:K64T:7DIQ:YOVQ:E2KK",
-      "name":"Host 3",
-      "osType":"windows",
-      "os":"Windows 10 Pro Version 1803 (OS Build 17134.285)",
-      "architecture":"x86_64",
-      "kernelVersion":"10.0 17134 (17134.1.amd64fre.rs4_release.180410-1804)",
-      "serverVersion":"18.06.1-ce",
-      "rootDirectory":"C:\\ProgramData\\Docker",
-      "experimental":false,
-      "httpProxy":"",
-      "httpsProxy":"",
-      "noProxy":"",
-      "labels":[],
-      "cpuCount":8,
-      "memoryTotal":17077833728,
-      "containerCount":1,
-      "runningContainerCount":1,
-      "pausedContainerCount":0,
-      "stoppedContainerCount":0,
-      "imageCount":120
-    }
-  ]);
+  model = new go.GraphLinksModel(this.graphData);
 
   model_2 = new go.GraphLinksModel([
     {
